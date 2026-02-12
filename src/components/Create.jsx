@@ -2,9 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
-const Create = (props) => {
-  const todos = props.todos;
-  const settodos = props.settodos;
+import { useContext } from "react";
+import { todocontext } from "../Wrapper";
+const Create = () => {
+  const [todos, settodos] = useContext(todocontext);
   const {
     register, // twp way binding ke liye
     handleSubmit, //submit ke liye
