@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { nanoid } from "nanoid";
+import { toast } from "react-toastify";
 const Create = (props) => {
   const todos = props.todos;
   const settodos = props.settodos;
@@ -26,6 +27,7 @@ const Create = (props) => {
     settodos(copytodos); // replacement step
     //settitle("");
     console.log(data);
+    toast.success("Todo Created!");
     reset();
   };
 
