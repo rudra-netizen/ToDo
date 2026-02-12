@@ -1,23 +1,32 @@
 import React from "react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { nanoid } from "nanoid";
 const Create = (props) => {
   const todos = props.todos;
   const settodos = props.settodos;
-  const [title, settitle] = useState("");
-  const SubmitHandler = (e) => {
-    e.preventDefault();
-
-    const newtodo = {
-      id: nanoid(),
-      title: title,
-      isCompleted: false,
-    };
-    console.log(newtodo);
-    let copytodos = [...todos]; //here we copied the original data
-    copytodos.push(newtodo); //original data ki copy me we have pushed new data
+  const {
+    register, // twp way binding ke liye
+    handleSubmit, //submit ke liye
+    reset, //form ko reset karne k liye
+    formState: { errors }, // errord ko find karne ke liyeS
+  } = useForm();
+  const SubmitHandler = (data) => {
+    console.log(data);
+    data.isCompleted = false;
+    data.id = nanoid();
+    //const newtodo = {
+    //id: nanoid(),
+    //title: title,
+    //isCompleted: false,
+    //};
+    //console.log(newtodo);
+    const copytodos = [...todos]; //here we copied the original data
+    //copytodos.push(newtodo); //original data ki copy me we have pushed new data
+    copytodos.push(data);
     settodos(copytodos); // replacement step
-    settitle("");
+    //settitle("");
+    console.log(data);
+    reset();
   };
 
   return (
@@ -25,14 +34,17 @@ const Create = (props) => {
       <h1 className="mb-10 text-5xl text-white font-thin">
         Set <span className="text-red-400">Reminder</span> for <br /> task
       </h1>
-      <form onSubmit={SubmitHandler}>
+      <form onSubmit={handleSubmit(SubmitHandler)}>
         <input
+          {...register("title", { required: "title cannot be empty" })}
           className="p-2 border-b w-full text-2xl font-thin outline-0"
-          onChange={(e) => settitle(e.target.value)}
           type="text"
-          value={title}
           placeholder="title"
         />
+
+        <small className="font-thin text-red-400">
+          {errors?.title?.message}
+        </small>
         <br />
         <br />
         <button className="mt-5 text-xl px-10 py-2 border rounded">
